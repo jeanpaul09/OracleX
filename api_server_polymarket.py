@@ -64,12 +64,6 @@ allowed_origins = [
     "http://localhost:3001",
 ]
 
-# Add all Vercel domains (preview and production)
-# Vercel uses *.vercel.app for preview deployments
-# We'll use a regex pattern or allow all Vercel domains
-import re
-vercel_pattern = re.compile(r"https://.*\.vercel\.app$")
-
 # Add custom Vercel domain if set
 if os.getenv("VERCEL_URL"):
     allowed_origins.append(f"https://{os.getenv('VERCEL_URL')}")
@@ -78,18 +72,10 @@ if os.getenv("VERCEL_URL"):
 if os.getenv("FRONTEND_URL"):
     allowed_origins.append(os.getenv("FRONTEND_URL"))
 
-# For Railway deployment, we'll allow all origins in production
-# but you can restrict this to your specific Vercel domain
-if os.getenv("RAILWAY_ENVIRONMENT") == "production":
-    # In production, allow all Vercel domains
-    # You can also set FRONTEND_URL to your specific Vercel domain
-    pass
-
-# More permissive CORS for Vercel deployments
-# In production, you may want to restrict this to your specific domain
+# CORS middleware - allows all Vercel preview deployments via regex
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins if allowed_origins else ["*"],  # Fallback to allow all if needed
+    allow_origins=allowed_origins,
     allow_origin_regex=r"https://.*\.vercel\.app",  # Allow all Vercel preview deployments
     allow_credentials=True,
     allow_methods=["*"],
