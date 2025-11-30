@@ -1,16 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "main.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "main.py"
-    }
-  ]
+  "buildCommand": "cd ui && npm install && npm run build",
+  "outputDirectory": "ui/.next",
+  "installCommand": "cd ui && npm install",
+  "framework": "nextjs",
+  "rootDirectory": "ui"
 }
-
